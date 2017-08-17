@@ -397,7 +397,7 @@ class GPUStatCollection(object):
         for g in self.gpus:
             stats=self.gpus[g]
             for (k, v) in [ (k, v) for (k, v) in stats.entry.items() if k in ['memory.used','temperature.gpu','utilization.gpu']]:
-                fp.write('{}:{}'.format(k,v)) 
+                fp.write('{}:{}'.format(k.replace('.','_'),v)) 
                 fp.write(' ')
 
         fp.write('\n')
