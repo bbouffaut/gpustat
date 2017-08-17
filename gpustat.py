@@ -387,6 +387,23 @@ class GPUStatCollection(object):
         fp.write('\n')
         fp.flush()
 
+    def print_cacti(self, fp=sys.stdout):
+        def date_handler(obj):
+            if hasattr(obj, 'isoformat'):
+                return obj.isoformat()
+            else:
+                raise TypeError
+
+        for g in self.gpus:
+            stats=self.gpus[g]
+            for (k, v) in [ (k, v) for (k, v) in stats.entry.items() if k in ['memory.used','temperature.gpu','utilization.gpu']]:
+                fp.write('{}:{}'.format(k,v)) 
+                fp.write(' ')
+
+        fp.write('\n')
+        fp.flush()
+
+
 
 def self_test():
     gpu_stats = GPUStatCollection.new_query()
@@ -409,7 +426,7 @@ def new_query():
     return GPUStatCollection.new_query()
 
 
-def print_gpustat(json=False, debug=False, **args):
+def print_gpustat(json=False, debug=False, cacti=False, **args):
     '''
     Display the GPU query results into standard output.
     '''
@@ -424,6 +441,8 @@ def print_gpustat(json=False, debug=False, **args):
 
     if json:
         gpu_stats.print_json(sys.stdout)
+    elif cacti:
+        gpu_stats.print_cacti(sys.stdout)
     else:
         gpu_stats.print_formatted(sys.stdout, **args)
 
@@ -443,6 +462,8 @@ def main():
                         help='The minimum column width of GPU names, defaults to 16')
     parser.add_argument('--json', action='store_true', default=False,
                         help='Print all the information in JSON format')
+    parser.add_argument('--cacti', action='store_true', default=False,
+                        help='Print all the information in CACTI compliant format (key1:value1 key2:value2 ...) ')
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Allow to print additional informations for debugging.')
     parser.add_argument('-v', '--version', action='version',

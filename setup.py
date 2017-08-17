@@ -12,7 +12,7 @@ setup(
     description='An utility to monitor NVIDIA GPU status (wrapper of nvidia-smi)',
     long_description=read_readme(),
     url='https://github.com/wookayin/gpustat',
-    author='Jongwook Choi',
+    author='Jongwook Choi forked by Baptiste BOUFFAUT',
     author_email='wookayin@gmail.com',
     keywords='nvidia-smi gpu cuda monitoring gpustat',
     classifiers=[
